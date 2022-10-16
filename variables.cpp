@@ -11,6 +11,6 @@ int main() {
     cout << "The double is " << fivepointnine << endl;
     cout << "The letter is " <<letter_D << endl;
     cout << "The greeting is " <<hello << endl;
-    cout << "The is " <<truthy << endl;
+    cout << truthy << endl;
     return 0;
 }
