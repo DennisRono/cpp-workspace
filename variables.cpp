@@ -12,5 +12,8 @@ int main() {
     cout << "The letter is " <<letter_D << endl;
     cout << "The greeting is " <<hello << endl;
     cout << truthy << endl;
+
+    const float PI = 3.14;
+    cout << "The value of Pi is " << PI << endl;
     return 0;
 }
