@@ -7,10 +7,10 @@ int main() {
     char letter_D = 'D';
     string hello = "Hello";
     bool truthy = true;
-    cout << fifteen << endl;
-    cout << fivepointnine << endl;
-    cout << letter_D << endl;
-    cout << hello << endl;
-    cout << truthy << endl;
+    cout << "The number is " << fifteen << endl;
+    cout << "The double is " << fivepointnine << endl;
+    cout << "The letter is " <<letter_D << endl;
+    cout << "The greeting is " <<hello << endl;
+    cout << "The is " <<truthy << endl;
     return 0;
 }
