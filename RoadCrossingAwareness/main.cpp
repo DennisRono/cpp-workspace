@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
     int x = 200;
     int y = 100;
     glutInitWindowPosition(x, y);
-    int win = glutCreateWindow("Tutorial 01");
+    int win = glutCreateWindow("Road Crossing Awareness");
     printf("window id: %d\n", win);
 
     GLclampf Red = 0.0f, Green = 0.0f, Blue = 0.0f, Alpha = 0.0f;
