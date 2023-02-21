@@ -1,221 +1,186 @@
-#include <stdio.h>
- #include <GL/gl.h>
- #include <GL/glut.h>
- #include <math.h>
+#include<windows.h>
+#include <cstdlib>
+#include <iostream>
+#include <ctime>
+#include <cmath>
 
-// Function Prototypes
-void specialKeys();
+#include <GL/glew.h>
 
-double rotate_y=0;
-double rotate_x=0;
-double rotate_z=0;
-double tx=0;
-double ty=0;
-double tz=0;
-double sx=0;
-double sy=0;
+#define FREEGLUT_STATIC
+#include <GL/freeglut.h>
 
-void draw_cube()
+using namespace std;
+
+int g_iWindowWidth = 1000, g_iWindowHeight = 800, g_hWindowHandle = 0;
+
+clock_t g_PreviousTicks, g_CurrentTicks;
+
+float g_fRotationRate = 50.0; // degree per second
+float g_fRotate1 = 0.0f;
+
+void InitGLUT(int argc, char* argv[]);
+
+void DisplayGL();
+void IdleGL();
+void KeyboardGL( unsigned char c, int x, int y);
+void MouseGL( int button, int state, int x, int y );
+void MotionGL( int x, int y );
+void ReshapeGL( int w, int h );
+
+
+int main( int argc, char* argv[] )
 {
-//Multi-colored side - FRONT
-  glBegin(GL_POLYGON);
+    InitGLUT( argc, argv );
 
-  glColor3f( 1.0, 0.0, 0.0 );     glVertex3f(  0.5, -0.5, -0.5 );      // P1 is red
-  glColor3f( 0.0, 1.0, 0.0 );     glVertex3f(  0.5,  0.5, -0.5 );      // P2 is green
-  glColor3f( 0.0, 0.0, 1.0 );     glVertex3f( -0.5,  0.5, -0.5 );      // P3 is blue
-  glColor3f( 1.0, 0.0, 1.0 );     glVertex3f( -0.5, -0.5, -0.5 );      // P4 is purple
+    g_PreviousTicks = clock();
+    glutMainLoop();
 
-  glEnd();
-
-  // Cyan side - BACK
-  glBegin(GL_POLYGON);
-  glColor3f(   0.0,  1.0, 1.0 );
-  glVertex3f(  0.5, -0.5, 0.5 );
-  glVertex3f(  0.5,  0.5, 0.5 );
-  glVertex3f( -0.5,  0.5, 0.5 );
-  glVertex3f( -0.5, -0.5, 0.5 );
-  glEnd();
-
-  // Purple side - RIGHT
-  glBegin(GL_POLYGON);
-  glColor3f(  1.0,  0.0,  1.0 );
-  glVertex3f( 0.5, -0.5, -0.5 );
-  glVertex3f( 0.5,  0.5, -0.5 );
-  glVertex3f( 0.5,  0.5,  0.5 );
-  glVertex3f( 0.5, -0.5,  0.5 );
-  glEnd();
-
-  // Green side - LEFT
-  glBegin(GL_POLYGON);
-  glColor3f(   0.0,  1.0,  0.0 );
-  glVertex3f( -0.5, -0.5,  0.5 );
-  glVertex3f( -0.5,  0.5,  0.5 );
-  glVertex3f( -0.5,  0.5, -0.5 );
-  glVertex3f( -0.5, -0.5, -0.5 );
-  glEnd();
-
-  // Blue side - TOP
-  glBegin(GL_POLYGON);
-  glColor3f(   0.0,  0.0,  1.0 );
-  glVertex3f(  0.5,  0.5,  0.5 );
-  glVertex3f(  0.5,  0.5, -0.5 );
-  glVertex3f( -0.5,  0.5, -0.5 );
-  glVertex3f( -0.5,  0.5,  0.5 );
-  glEnd();
-
-  // Red side - BOTTOM
-  glBegin(GL_POLYGON);
-  glColor3f(   1.0,  0.0,  0.0 );
-  glVertex3f(  0.5, -0.5, -0.5 );
-  glVertex3f(  0.5, -0.5,  0.5 );
-  glVertex3f( -0.5, -0.5,  0.5 );
-  glVertex3f( -0.5, -0.5, -0.5 );
-  glEnd();
+    // return 0;
+    // system("PAUSE");
 }
 
+void InitGLUT( int argc, char* argv[] )
+{
+    glutInit( &argc, argv );
 
-// display() Callback functions
-void display_T(){
-   //  Clear screen and Z-buffer
-  glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-   // Reset transformations
-  glLoadIdentity();
-  glRotatef( 15, 0.0, 1.0, 0.0 );
-  glTranslatef( tx, 0.0, 0.0 );
-  glTranslatef( 0.0, ty, 0.0 );
-  glTranslatef( 0.0, 0.0, tz);
-  draw_cube();
-  glFlush();
-  glutSwapBuffers();
- }
+    glutSetOption( GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION );
 
-void display_R(){
-  glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-  glLoadIdentity();
-  glRotatef( rotate_x, 1.0, 0.0, 0.0 );
-  glRotatef( rotate_y, 0.0, 1.0, 0.0 );
-  glRotatef( rotate_z, 0.0, 0.0, 1.0);
-  draw_cube();
-  glFlush();
-  glutSwapBuffers();
- }
+    int iScreenWidth = glutGet( GLUT_SCREEN_WIDTH );
+    int iScreenHeight = glutGet( GLUT_SCREEN_HEIGHT );
+
+    glutInitDisplayMode( GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_DEPTH );
+
+    glutInitWindowPosition( ( iScreenWidth - g_iWindowWidth ) / 2, ( iScreenHeight - g_iWindowHeight ) / 2 );
+    glutInitWindowSize( g_iWindowHeight, g_iWindowWidth );
+
+    g_hWindowHandle = glutCreateWindow("OpenGL Template");
+
+    glutDisplayFunc(DisplayGL);
+    glutIdleFunc(IdleGL);
+    glutKeyboardFunc(KeyboardGL);
+    glutMouseFunc(MouseGL);
+    glutMotionFunc(MotionGL);
+    glutReshapeFunc(ReshapeGL);
+
+    glEnable( GL_DEPTH_TEST );
+}
+
+// Desc: Display the cube
+void DisplayGL()
+{
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    glMatrixMode( GL_MODELVIEW );
+    glLoadIdentity();
+
+    // glScalef(0.25f, 0.25f, 2.0f);
+    glTranslatef( 0.0f, 0.0f, -6.0f );
+
+    glRotatef( g_fRotate1, 0.0f, 1.0f, 0.0f);
+
+    // Render the cube
+    glBegin( GL_QUADS );
+
+    // Top face
+    glColor3f(   0.0f,  1.0f,   0.0f ); // Green
+    glVertex3f(  1.0f,  1.0f,  -1.0f ); // Top-right of the Top face
+    glVertex3f( -1.0f,  1.0f,  -1.0f ); // Top-left of the Top face
+    glVertex3f( -1.0f,  1.0f,   1.0f ); // Buttom-left of the Top Face
+    glVertex3f(  1.0f,  1.0f,   1.0f ); // Buttom-right of the Top Face
+
+    // Bottom face
+    glColor3f(   1.0f,  0.5f,  0.0f ); // Orange
+    glVertex3f(  1.0f, -1.0f, -1.0f ); // Top-right of the Bottom face
+    glVertex3f( -1.0f, -1.0f, -1.0f ); // Top-left of the Bottom face
+    glVertex3f( -1.0f, -1.0f,  1.0f ); // Buttom-left of the Bottom face
+    glVertex3f(  1.0f, -1.0f,  1.0f ); // Buttom-right of the Bottom face
 
 
+    // Front face
+    glColor3f(   1.0f,  0.0f,  0.0f ); // Red
+    glVertex3f(  1.0f,  1.0f,  1.0f ); // Top-right of the Front face
+    glVertex3f( -1.0f,  1.0f,  1.0f ); // Top-left of the Front face
+    glVertex3f( -1.0f, -1.0f,  1.0f ); // Buttom-left of the Front face
+    glVertex3f(  1.0f, -1.0f,  1.0f ); // Buttom-right of the Front face
 
+    // Back face
+    glColor3f(   1.0f,  1.0f,  0.0f ); // Yellow
+    glVertex3f(  1.0f, -1.0f, -1.0f ); // Top-right of the Back face
+    glVertex3f( -1.0f, -1.0f, -1.0f ); // Top-left of the Back face
+    glVertex3f( -1.0f,  1.0f, -1.0f ); // Buttom-left of the Back face
+    glVertex3f(  1.0f,  1.0f, -1.0f ); // Buttom-right of the Back face
 
-void display_S(){
-   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-   glLoadIdentity();
-   glScalef( sx, sy, 0.0 );
-   glRotatef( 15, 0.0, 1.0, 0.0 );
-   glRotatef( 25, 1.0, 0.0, 0.0 );
-   glRotatef( 5, 0.0, 0.0, 1.0 );
-   draw_cube();
-   glFlush();
-   glutSwapBuffers();
- }
+    // Left face
+    glColor3f(   0.0f,  0.0f,  1.0f ); // Blue
+    glVertex3f( -1.0f,  1.0f,  1.0f ); // Top-right of the Left face
+    glVertex3f( -1.0f,  1.0f, -1.0f ); // Top-left of the Left face
+    glVertex3f( -1.0f, -1.0f, -1.0f ); // Buttom-left of the Left face
+    glVertex3f( -1.0f, -1.0f,  1.0f ); // Buttom-right of the Left face
 
-// specialKeys() Callback Function
-void specialKeys( int key, int x, int y ) {
+    // Right face
+    glColor3f(   1.0f,  0.0f,  1.0f ); // Violet
+    glVertex3f(  1.0f,  1.0f,  1.0f ); // Top-right of the Right face
+    glVertex3f(  1.0f,  1.0f, -1.0f ); // Top-left of the Right face
+    glVertex3f(  1.0f, -1.0f, -1.0f ); // Buttom-left of the Right face
+    glVertex3f(  1.0f, -1.0f,  1.0f ); // Buttom-right of the Right face
+    glEnd();
 
-    if (key == GLUT_KEY_RIGHT){                  //Translatation along forward x-axis
-    tx+=0.1;
+    glutSwapBuffers();
+    glutPostRedisplay();
+
+}
+
+void IdleGL()
+{
+    g_CurrentTicks = clock();
+    float deltaTicks = (float)( g_CurrentTicks - g_PreviousTicks);
+    g_PreviousTicks = g_CurrentTicks;
+
+    float fDetaTime = deltaTicks / (float) CLOCKS_PER_SEC;
+
+    g_fRotate1 +=  ( 10 * g_fRotationRate * fDetaTime );
+    g_fRotate1 = fmodf( g_fRotate1, 360.0f );
+}
+
+// Desc: Keyboard input handle
+void KeyboardGL( unsigned char c, int x, int y)
+{
+    cout << "Key Pressed " << (int)c << endl;
+
+    switch(c)
+    {
+        case '1':
+            break;
+        case '2':
+            break;
+        // press esc to escape
+        case 27:
+            glutLeaveMainLoop();
+            break;
+
     }
-  else if (key == GLUT_KEY_LEFT){		//Translatation along backward x-axis
-    tx-=0.1;
-    }
-  else if (key == GLUT_KEY_UP){			//Translatation along upward y-axis
-    ty+=0.1;
-    }
-  else if (key == GLUT_KEY_DOWN){              //Translatation along downward y-axis
-    ty-=0.1;
-    }
-  else if (key == GLUT_KEY_F9){		      //Translatation along z-axis
-    tz+=0.2;
-   }
-  else if (key == GLUT_KEY_F10){	     //Translatation along z-axis
-    tz-=0.2;
-   }
-  else if (key == GLUT_KEY_F1 )              //Rotation about Z axis anti-cloclwise
-  {
-  rotate_z += 5;
-  }
- else if (key == GLUT_KEY_F2 ) 	   	    //Rotation about Z axis cloclwise
-  {
-  rotate_z -= 5;
-  }
- else if (key == GLUT_KEY_F3 )             //Rotation about Y axis anti-cloclwise
+}
+
+void MouseGL( int button, int state, int x, int y )
 {
-rotate_y += 5;
+
 }
-else if (key == GLUT_KEY_F4 ) 		  //Rotation about Y axis cloclwise
+
+void MotionGL( int x, int y )
 {
-rotate_y -= 5;
+
 }
-else if (key == GLUT_KEY_F5 )             //Rotation about X axis anti-cloclwise
+
+void ReshapeGL( int w, int h )
 {
-rotate_x += 5;
+    if ( h == 0 )
+        h = 1;
+    g_iWindowWidth = w;
+    g_iWindowHeight = h;
+    glViewport( 0, 0, g_iWindowWidth, g_iWindowHeight );
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity();
+    gluPerspective( 60.0f, g_iWindowWidth / (GLdouble) g_iWindowHeight, 0.1, 100.0 );
+    glutPostRedisplay();
 
 }
-else if (key == GLUT_KEY_F6 ) 		//Rotation about X axis cloclwise
-{
-rotate_x -= 5;
-    }
-else if (key == GLUT_KEY_F7 )                          //Scaling-UP
-{
-    sx=1.5;
-    sy=1.5;
-}
-else if (key == GLUT_KEY_F8 ) 				//Scaling-down
-{
-    sx=0.5;
-    sy=0.5;
-}
- glutPostRedisplay();
-}
-
-void win_init()
-{
- glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
- glutInitWindowPosition(0, 0);
- glutInitWindowSize(500, 500);
- glutCreateWindow("Awesome Cube");
- glEnable(GL_DEPTH_TEST);
-}
-
-
-int main(int argc, char* argv[]){
-int ch;
-glutInit(&argc,argv);
- do{
-printf("\n  1.Translation \n  2.Rotation\n  3.Scaling \n4. Exit");
-	     printf("\n Enter ur chioce:");
-	     scanf("%d",&ch);
-	     switch(ch)
-	     {
-case 1:
-             win_init();
-             glutDisplayFunc(display_T);
-             glutSpecialFunc(specialKeys);
-             glutMainLoop();
-break;
-
-case 2:
-	     win_init();
-             glutDisplayFunc(display_R);
-             glutSpecialFunc(specialKeys);
-             glutMainLoop();
-break;
-
-case 3:
-             win_init();
-             glutDisplayFunc(display_S);
-             glutSpecialFunc(specialKeys);
-             glutMainLoop();
-break;
-
-}
-}while(ch!=4);
-
-   return 0;
- }
