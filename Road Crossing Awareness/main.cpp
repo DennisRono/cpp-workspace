@@ -49,66 +49,51 @@ void frontscreen(void){
     glFlush();
 }
 
-void myKeyboard( unsigned char key, int x, int y )
-
-{
-switch(key)
-{
-	case 13:
-		if(flag==1)
-		{
-			mydisplay();
-		}
-		if(flag==0) //Ascii of 'enter' key is 13
-		{
-	flag=1;mydisplay();
-		}
-     break;
-	case 's':
-	    if(flag==1)
-		{
-			speed=1;;
-		}
-	break;
-
-
-	default:break;
+void myKeyboard( unsigned char key, int x, int y ){
+    switch(key){
+        case 13:
+            if(flag==1){
+                mydisplay();
+            }
+            if(flag==0) {
+                flag=1;
+                mydisplay();
+            }
+            break;
+        case 's':
+            if(flag==1){
+                speed=1;;
+            }
+        break;
+        default:break;
+    }
 }
-}
-void spKey( int key, int x, int y )
-
-{
-switch(key)
-{
-
-    case GLUT_KEY_RIGHT:
-    flag=1;
-    moveLeft();
-		break;
-    case GLUT_KEY_LEFT:
-    flag=1;
-    moveRight();
-		break;
-	default:break;
-}
+void spKey( int key, int x, int y ){
+    switch(key){
+        case GLUT_KEY_RIGHT:
+        flag=1;
+        moveLeft();
+            break;
+        case GLUT_KEY_LEFT:
+        flag=1;
+        moveRight();
+            break;
+        default:break;
+    }
 }
 
 
-void mydisplay(void)
-{
-glClear(GL_COLOR_BUFFER_BIT);
-if(flag==0)
-frontscreen ();
-if(flag==1)
-display();
-glutSwapBuffers();
+void mydisplay(void){
+    glClear(GL_COLOR_BUFFER_BIT);
+    if(flag==0)
+        frontscreen ();
+    if(flag==1)
+        display();
+    glutSwapBuffers();
 }
 
-void update(int value)
-{
-
+void update(int value){
     if (speed = 1){
-
       a=a-18;
       b=b+18;
       speed=0;
