@@ -38,20 +38,16 @@ void drawstring(float x,float y,float z,char *string) //writing function
 	}
 }
 
-void frontscreen(void)
-{
-setFont(GLUT_BITMAP_TIMES_ROMAN_24);
-glClearColor(0.15,0.1,0.01,0);/*background for cover page*/
-glClear(GL_COLOR_BUFFER_BIT);
-glColor3f(1.0,1.0,1.0);
-drawstring(550,650,0.0,"Arwsh 3rbia fel Donia");
-carStart();
-drawstring(543,100,0.0,"PRESS ENTER TO START");
-glFlush();
+void frontscreen(void){
+    setFont(GLUT_BITMAP_TIMES_ROMAN_24);
+    glClearColor(0.15,0.1,0.01,0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1.0,1.0,1.0);
+    drawstring(550,650,0.0,"Road Crossing Awareness");
+    carStart();
+    drawstring(543,100,0.0,"PRESS ENTER TO START");
+    glFlush();
 }
-
-
-
 
 void myKeyboard( unsigned char key, int x, int y )
 
