@@ -8,6 +8,8 @@
 
 using namespace std;
 
+GLuint VBO;
+
 static void RenderSceneCB(){
     glClear(GL_COLOR_BUFFER_BIT);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
