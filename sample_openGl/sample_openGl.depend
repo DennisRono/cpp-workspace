@@ -1,9 +1,8 @@
 # depslib dependency file v1.0
-1676564903 source:f:\learn\cpp-workspace\sample_opengl\main.cpp
+1676805362 source:f:\learn\cpp-workspace\sample_opengl\main.cpp
 	<stdlib.h>
-	"GL/glut.h"
+	<GL/glut.h>
 	<iostream>
-	<math.h>
 
 1676564864 source:f:\learn\cpp-workspace\sample_opengl\circle.cpp
 	<Windows.h>
@@ -17,4 +16,9 @@
 	"circle.h"
 
 1676564726 f:\learn\cpp-workspace\sample_opengl\include\circle.h
+
+1676795452 f:\learn\cpp-workspace\sample_opengl\glmatrix.h
+
+1676803416 f:\learn\cpp-workspace\sample_opengl\glu.h
+	<GL/gl.h>
 
