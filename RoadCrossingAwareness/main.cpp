@@ -31,8 +31,8 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(200, 100);
     glutCreateWindow("Road Crossing Awareness");
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glutReshapeFunc(reshape);
     glutDisplayFunc(draw);
+    glutReshapeFunc(reshape);
     glutMainLoop();
     return 0;
 }
