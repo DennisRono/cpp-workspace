@@ -782,13 +782,14 @@ glPopMatrix();
 void reshape(GLint w, GLint h) {
   glViewport(0, 0, w, h);
   glMatrixMode(GL_PROJECTION);
-  GLfloat aspect = GLfloat(w) / GLfloat(h);
+  //GLfloat aspect = GLfloat(w) / GLfloat(h);
   glLoadIdentity();
-  if (w <= h) {
-    glOrtho(-2.5, 2.5, -2.5/aspect, 2.5/aspect, -10.0, 10.0);
-  } else {
-    glOrtho(-2.5*aspect, 2.5*aspect, -2.5, 2.5, -10.0, 10.0);
-  }
+  glOrtho(0.0,1346.0,0.0,728.0)
+  //if (w <= h) {
+  //  glOrtho(-2.5, 2.5, -2.5/aspect, 2.5/aspect, -10.0, 10.0);
+  //} else {
+  //  glOrtho(-2.5*aspect, 2.5*aspect, -2.5, 2.5, -10.0, 10.0);
+  //}
 }
 
 int main(int argc, char* argv[])
