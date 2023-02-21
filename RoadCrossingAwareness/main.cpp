@@ -1,73 +1,23 @@
-#include <stdlib.h>
 #include <GL/glut.h>
-#include <iostream>
-#define WINDOW_TITLE "Project"
-using namespace std;
-
-int m_iWidth = 800;
-int m_iHeight = 600;
-
-
-void keyboardDown(unsigned char key, int x, int y){
-  switch(key) {
-  case 'Q':
-  case 'q':
-  case  27:
-	  exit(0);
-  }
-}
-
-
-void idle(void){
-	glutPostRedisplay();
-}
-
-
-void draw()
+void displayMe(void)
 {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.6,0.6,0.6,1);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-	glBegin(GL_TRIANGLES);
-		glColor3f(1,0,0);
-		glVertex3f(-0.5,0,-1);
-		glColor3f(0.5,0.5,0);
-		glVertex3f(0.5,0,-1);
-		glColor3f(0,0.5,0.5);
-		glVertex3f(0,0.5,-1);
-	glEnd();
-
-	glutSwapBuffers();
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_POLYGON);
+        glVertex3f(0.0, 0.0, 0.0);
+        glVertex3f(0.5, 0.0, 0.0);
+        glVertex3f(0.5, 0.5, 0.0);
+        glVertex3f(0.0, 0.5, 0.0);
+    glEnd();
+    glFlush();
 }
-
-
-void reshape(int width, int height)
+int main(int argc, char** argv)
 {
-  glViewport (0, 0, (GLsizei) width, (GLsizei) height);
-  glMatrixMode (GL_PROJECTION);
-  glLoadIdentity();
-  float ratio = (height == 0)?1:(GLfloat) width/(GLfloat) height;
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-}
-
-
-bool initialize(){
-	glEnable(GL_DEPTH_TEST);
-	return true;
-}
-
-int main(int argc, char** argv){
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	glutInitWindowSize(m_iWidth, m_iHeight);
-	glutCreateWindow(WINDOW_TITLE);
-	if(!initialize()) return 1;
-	glutDisplayFunc(draw);
-	glutIdleFunc(idle);
-	glutReshapeFunc(reshape);
-	glutKeyboardFunc(keyboardDown);
-	glutMainLoop();
-	return 0;
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE);
+    glutInitWindowSize(300, 300);
+    glutInitWindowPosition(100, 100);
+    glutCreateWindow("SAMPLE TEST");
+    glutDisplayFunc(displayMe);
+    glutMainLoop();
+    return 0;
 }
