@@ -7,6 +7,7 @@
 #include <GL/freeglut.h>
 
 using namespace std;
+void reshape();
 
 void draw(){
 
@@ -19,7 +20,20 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(200, 100);
     glutCreateWindow("Road Crossing Awareness");
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glutReshapeFunc(reshape);
     glutDisplayFunc(draw);
     glutMainLoop();
     return 0;
+}
+
+void reshape(GLint w, GLint h) {
+  glViewport(0, 0, w, h);
+  glMatrixMode(GL_PROJECTION);
+  GLfloat aspect = GLfloat(w) / GLfloat(h);
+  glLoadIdentity();
+  if (w <= h) {
+    glOrtho(-2.5, 2.5, -2.5/aspect, 2.5/aspect, -10.0, 10.0);
+  } else {
+    glOrtho(-2.5*aspect, 2.5*aspect, -2.5, 2.5, -10.0, 10.0);
+  }
 }
