@@ -221,7 +221,7 @@ void ReshapeGL( int w, int h )
 
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-    glhPerspectivef2( 60.0f, g_iWindowWidth / (GLdouble) g_iWindowHeight, 0.1, 100.0 );
+    glhPerspectivef2( 60.0f*, g_iWindowWidth / (GLdouble) g_iWindowHeight, 0.1, 100.0 );
 
     glutPostRedisplay();
 
