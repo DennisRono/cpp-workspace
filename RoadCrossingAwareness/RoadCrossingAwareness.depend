@@ -1,9 +1,0 @@
-# depslib dependency file v1.0
-1676975588 source:f:\learn\cpp-workspace\roadcrossingawareness\main.cpp
-	<cstdlib>
-	<iostream>
-	<ctime>
-	<cmath>
-	<GL/glew.h>
-	<GL/freeglut.h>
-
