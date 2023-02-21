@@ -1,21 +1,5 @@
 #include<windows.h>
-#include<GL/GL/glut.h>
-
-int main(int argc, char* argv[]){
-    glutInit( &argc, argv );
-    glutSetOption( GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION );
-    glutInitDisplayMode( GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_DEPTH );
-    glutInitWindowPosition( 300, 300 );
-    glutInitWindowSize( 300, 300 );
-    glutDisplayFunc(DisplayGL);
-    glutIdleFunc(IdleGL);
-    glutKeyboardFunc(KeyboardGL);
-    glutMouseFunc(MouseGL);
-    glutMotionFunc(MotionGL);
-    glutReshapeFunc(ReshapeGL);
-    glEnable( GL_DEPTH_TEST );
-    glutMainLoop();
-}
+#include<GL/glut.h>
 
 void DisplayGL(){
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -63,4 +47,14 @@ void DisplayGL(){
 
     glutSwapBuffers();
     glutPostRedisplay();
+}
+
+int main(int argc, char* argv[]){
+    glutInit( &argc, argv );
+    glutInitDisplayMode( GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_DEPTH );
+    glutInitWindowPosition( 300, 300 );
+    glutInitWindowSize( 300, 300 );
+    glutDisplayFunc(DisplayGL);
+    glEnable( GL_DEPTH_TEST );
+    glutMainLoop();
 }
