@@ -8,8 +8,39 @@
 
 using namespace std;
 
-void draw(){
+void road()
+{
+glPushMatrix();
+glScaled(40.0,40.0,0.0);
+glColor3f(0.1,0.1,0.1);
+glBegin(GL_POLYGON);
+//straight road
+glVertex2f(0,5);
+glVertex2f(40,5);
+glVertex2f(40,10);
+glVertex2f(0,10);
+glEnd();
+//green edge
+glBegin(GL_POLYGON);
+glColor3f(0.1,0.2,0.1);
+glVertex2f(0,5);
+glVertex2f(40,5);
+glVertex2f(40,4);
+glVertex2f(0,4);
+glEnd();
+//cross road
+glColor3f(0.1,0.1,0.1);
+glBegin(GL_POLYGON);
+glVertex2f(0,10);
+glVertex2f(15,10);
 
+
+glEnd();
+glPopMatrix();
+}
+
+void draw(){
+    road();
 }
 
 void reshape(GLint w, GLint h) {
