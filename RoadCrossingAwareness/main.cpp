@@ -14,9 +14,9 @@ void draw(){
 
 void reshape(GLint w, GLint h) {
   glViewport(0, 0, w, h);
-  glLoadIdentity();
   glMatrixMode(GL_PROJECTION);
   GLfloat aspect = GLfloat(w) / GLfloat(h);
+  glLoadIdentity();
   if (w <= h) {
     glOrtho(-2.5, 2.5, -2.5/aspect, 2.5/aspect, -10.0, 10.0);
   } else {
