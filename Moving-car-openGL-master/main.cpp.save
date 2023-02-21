@@ -1,3 +1,4 @@
+
 #include<stdio.h>
 #include<GL/glut.h>
 
@@ -15,7 +16,7 @@ void update();
 void control();
 void moveLeft();
 void moveRight();
-GLint a=300,b=-300,flag=0,speed =0;
+GLint a=300,b=-300,flag=0,traffic_regulator=1,control_keyl,control_keyr;
 GLfloat red=0,blue=1,green=.3;
 
 GLfloat p=0,q=0,r=0;
@@ -51,7 +52,17 @@ glFlush();
 }
 
 
+void control()
+{
+	if(control_keyl!='l'||control_keyr!='r')
+	{
+	if(control_keyl=='l')
+      a=a+20;
+	if(control_keyr=='r')
+	 b=b-20;
+	}
 
+}
 
 void myKeyboard( unsigned char key, int x, int y )
 
@@ -67,14 +78,18 @@ switch(key)
 		{
 	flag=1;mydisplay();
 		}
-     break;
-	case 's':
-	    if(flag==1)
-		{
-			speed=1;;
-		}
-	break;
 
+	break;
+	case 'l':control_keyl=key;
+		p=0;q=0;r=1;
+	break;
+	case 'r':control_keyr=key;
+		p=0;q=0;r=1;
+	break;
+	case 's':mydisplay();
+	break;
+	case 'h':flag=1;mydisplay();
+		break;
 
 	default:break;
 }
@@ -110,15 +125,9 @@ glutSwapBuffers();
 
 void update(int value)
 {
-
-    if (speed = 1){
-
-      a=a-18;
-      b=b+18;
-      speed=0;
-    }
 a=a-6;
 b=b+6;
+control();
 /*making day to night*/
 if(blue!=0&&green!=0)
 {blue-=.004;green-=.004;
@@ -127,13 +136,9 @@ glutPostRedisplay();
 }
 void updateRight(int value)
 {
-    if (speed = 1){
-
-      a=a+18;
-      b=b-18;
-      speed=0;
-    }
-
+a=a+6;
+b=b-6;
+control();
 /*making day to night*/
 if(blue!=0&&green!=0)
 {blue-=.004;green-=.004;
@@ -154,6 +159,7 @@ glFlush();
 }
 void moveLeft(void)
 {
+	if(traffic_regulator)
 glutTimerFunc(50,update,0);
 glClear(GL_COLOR_BUFFER_BIT);
 glClearColor(red,green,blue,0);/*back ground for sky*/
@@ -165,6 +171,7 @@ glFlush();
 }
 void moveRight(void)
 {
+	if(traffic_regulator)
 glutTimerFunc(50,updateRight,0);
 glClear(GL_COLOR_BUFFER_BIT);
 glClearColor(red,green,blue,0);/*back ground for sky*/
@@ -733,8 +740,8 @@ glVertex2f(3.2,1.8);
 glVertex2f(3.1,2.2);
 glEnd();
 
-//drawing front tyre
-glBegin(GL_POLYGON);
+
+glBegin(GL); //drawing front tyre
 glVertex2f(17.0,2.5);
 glVertex2f(17.0,2.6);
 glVertex2f(17.15,3.1);
@@ -778,21 +785,26 @@ glEnd();
 glPopMatrix();
 }
 
-void myinit(){
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(0.0,1346.0,0.0,728.0);
+void myinit()
+{
+
+glMatrixMode(GL_PROJECTION);
+glLoadIdentity();
+gluOrtho2D(0.0,1346.0,0.0,728.0);
 }
 
-int main(int argc, char* argv[]){
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(1346,728);
-    glutInitWindowPosition(0,0);
-    glutCreateWindow("Road Crossing Awareness");
-    glutDisplayFunc(mydisplay);
-    glutKeyboardFunc(myKeyboard);
-    glutSpecialFunc(spKey);
-    myinit();
-    glutMainLoop();
+int main(int argc, char* argv[])
+{
+glutInit(&argc, argv);
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+glutInitWindowSize(1346,728);
+glutInitWindowPosition(0,0);
+glutCreateWindow("Traffic signal");
+
+/*call back functions*/
+glutDisplayFunc(mydisplay);
+glutKeyboardFunc(myKeyboard);
+glutSpecialFunc(spKey);
+myinit();
+glutMainLoop();
 }
