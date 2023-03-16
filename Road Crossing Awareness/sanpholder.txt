@@ -1,0 +1,116 @@
+#include <iostream>
+#include <GL/glut.h>
+
+void drawCar(float a);
+
+float carXPos = -0.5; // position of car along x-axis
+float personXPos = 0.5; // position of person along x-axis
+bool isPersonHit = false; // flag to check if person is hit by car
+
+void init() {
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+    glMatrixMode(GL_MODELVIEW);
+    //glutSetInputFocus(glutGetWindow());
+}
+
+void spKey(int key, int x, int y) {
+  switch (key) {
+    case GLUT_KEY_RIGHT:
+        carXPos += 0.1;
+        drawCar(carXPos);
+        break;
+    case GLUT_KEY_LEFT:
+        carXPos -= 0.1;
+        drawCar(carXPos);
+        break;
+    default:
+        break;
+  }
+}
+
+
+void drawCar(float a) {
+    glBegin(GL_QUADS);
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex2f(a, -0.5);
+    glVertex2f(a, -0.4);
+    glVertex2f(a + 0.2, -0.4);
+    glVertex2f(a + 0.2, -0.5);
+    glEnd();
+}
+
+void drawPerson() {
+    glBegin(GL_QUADS);
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex2f(personXPos, -0.5);
+    glVertex2f(personXPos, -0.4);
+    glVertex2f(personXPos + 0.1, -0.4);
+    glVertex2f(personXPos + 0.1, -0.5);
+    glEnd();
+}
+
+void drawRoad() {
+    glBegin(GL_QUADS);
+    glColor3f(0.2, 0.2, 0.2);
+    glVertex2f(-1.0, -0.5);
+    glVertex2f(-1.0, 0.0);
+    glVertex2f(1.0, 0.0);
+    glVertex2f(1.0, -0.5);
+    glEnd();
+}
+
+void drawEnvironment() {
+    glBegin(GL_QUADS);
+    glColor3f(0.5, 0.5, 0.5);
+    glVertex2f(-1.0, 0.0);
+    glVertex2f(-1.0, 1.0);
+    glVertex2f(1.0, 1.0);
+    glVertex2f(1.0, 0.0);
+    glEnd();
+}
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    glLoadIdentity();
+    
+    drawRoad();
+    drawEnvironment();
+    drawCar(carXPos);
+    
+    if (!isPersonHit) {
+        drawPerson();
+        personXPos += 0.001;
+        if (personXPos > 1.0) {
+            personXPos = -0.5;
+        }
+        
+        if (carXPos + 0.2 >= personXPos && carXPos <= personXPos + 0.1) {
+            isPersonHit = true;
+            std::cout << "Person is hit by car\n";
+        }
+    }
+    
+    carXPos += 0.002;
+    if (carXPos > 1.0) {
+        carXPos = -0.2;
+        isPersonHit = false;
+    }
+    
+    glutSwapBuffers();
+}
+
+int main(int argc, char **argv) {
+    glutInit(&argc, argv);
+    init();
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+    glutInitWindowSize(800, 600);
+    glutCreateWindow("Road Crossing Awareness");
+    glutSetWindow(glutGetWindow());
+    glutDisplayFunc(display);
+    glutSpecialFunc(spKey);
+    glutMainLoop();
+    return 0;
+}

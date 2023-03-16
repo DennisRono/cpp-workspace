@@ -1,18 +1,16 @@
 #include<stdio.h>
 
 #include<GL/glut.h>
-#include<cmath>
 
 
 void road();
 void car();
-void drawPerson();
 void mydisplay();
 void display();
-// void update();
+void update();
 void moveLeft();
 void moveRight();
-GLint a = 300, b = -300, flag = 0, speed = 0, d = 10;
+GLint a = 300, b = -300, flag = 0, speed = 0;
 GLfloat red = 0, blue = 1, green = .3;
 
 GLfloat p = 0, q = 0, r = 0;
@@ -60,7 +58,7 @@ void mydisplay(void) {
 }
 
 void update(int value) {
-  if (speed == 1) {
+  if (speed = 1) {
     a = a - 18;
     b = b + 18;
     speed = 0;
@@ -75,7 +73,7 @@ void update(int value) {
   glutPostRedisplay();
 }
 void updateRight(int value) {
-  if (speed == 1) {
+  if (speed = 1) {
     a = a + 18;
     b = b - 18;
     speed = 0;
@@ -94,7 +92,6 @@ void display(void) {
   glClearColor(red, green, blue, 0); /*back ground for sky*/
   road();
   car();
-  drawPerson();
   glFlush();
 }
 
@@ -104,7 +101,6 @@ void moveLeft(void) {
   glClearColor(red, green, blue, 0); /*back ground for sky*/
   road();
   car();
-  drawPerson();
   glFlush();
 }
 
@@ -114,50 +110,8 @@ void moveRight(void) {
   glClearColor(red, green, blue, 0); /*back ground for sky*/
   road();
   car();
-  drawPerson();
   glFlush();
 }
-
-void drawCircle(float cx, float cy, float radius, int num_segments) {
-    glBegin(GL_LINE_LOOP);
-    for (int i = 0; i < num_segments; i++) {
-        float theta = 2.0f * 3.1415926f * float(i) / float(num_segments);
-        float x = radius * cosf(theta);
-        float y = radius * sinf(theta);
-        glVertex2f(x + cx, y + cy);
-    }
-    glEnd();
-}
-
-
-void drawPerson() {
-    // Draw head
-    drawCircle(673.0, 356.0, 30.0, 20);
-    
-    // Draw body
-    glBegin(GL_LINES);
-        glColor3f(1.0, 0.0, 0.0);
-        glVertex2f(673.0, 326.0);
-        glVertex2f(673.0, 246.0);
-    glEnd();
-    
-    // Draw arms
-    glBegin(GL_LINES);
-        glColor3f(1.0, 0.0, 0.0);
-        glVertex2f(620.0, 300.0);
-        glVertex2f(720.0, 300.0);
-    glEnd();
-    
-    // Draw legs
-    glBegin(GL_LINES);
-        glVertex2f(673.0, 246.0);
-        glVertex2f(620.0, 200.0);
-        glVertex2f(673.0, 246.0);
-        glVertex2f(720.0, 200.0);
-    glEnd();
-}
-
-
 
 void road() {
   glPushMatrix();
@@ -193,7 +147,7 @@ void road() {
 void car() {
     //making color for outer line
     glPushMatrix(); 
-    glTranslated(b, 178.0, 0.0);
+    glTranslated(b, 190.0, 0.0);
     glScaled(20.0, 20.0, 0.0);
     glColor3f(1.0, 0.0, 0.0);
     glBegin(GL_POLYGON);
