@@ -1,6 +1,4 @@
-#pragma once
-
-#include <Gl/gl.h>
+#include <GL/glut.h>
 
 void init(){
 	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);	//Line C
