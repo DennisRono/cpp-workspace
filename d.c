@@ -30,4 +30,4 @@ void bubble_sort(int a[], int length){
   } while (swapped);
 }
 
-int test[3][4] = {{3, 23, 12, 23, 2}, {13, 3, 1, 4, 9}, {24, 76, 14, 26}};
+int numbers[3][4] = {{3, 23, 12, 23}, {13, 3, 1, 4}, {24, 76, 14, 26}};

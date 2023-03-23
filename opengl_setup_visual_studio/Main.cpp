@@ -1,0 +1,526 @@
+#include<stdio.h>
+#include<iostream>
+
+#include<GL/glut.h>
+#include<cmath>
+
+
+void road();
+void car();
+void drawPerson();
+void mydisplay();
+void display();
+void moveLeft();
+void moveRight();
+GLint a = 300, b = -300, flag = 0, speed = 0, d = 10;
+GLfloat red = 0, blue = 1, green = .3;
+
+GLfloat p = 0, q = 0, r = 0;
+
+void myKeyboard(unsigned char key, int x, int y) {
+    switch (key) {
+    case 13:
+        if (flag == 1) {
+            mydisplay();
+        }
+        if (flag == 0) {
+            flag = 1;
+            mydisplay();
+        }
+        break;
+    case 's':
+        if (flag == 1) {
+            speed = 1;
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+void spKey(int key, int x, int y) {
+    switch (key) {
+    case GLUT_KEY_RIGHT:
+        flag = 1;
+        moveLeft();
+        break;
+    case GLUT_KEY_LEFT:
+        flag = 1;
+        moveRight();
+        break;
+    default:
+        break;
+    }
+}
+
+void mydisplay(void) {
+    glClear(GL_COLOR_BUFFER_BIT);
+    display();
+    glutSwapBuffers();
+}
+
+void update(int value) {
+    if (speed == 1) {
+        a = a - 18;
+        b = b + 18;
+        speed = 0;
+    }
+    a = a - 6;
+    b = b + 6;
+    /*making day to night*/
+    if (blue != 0 && green != 0) {
+        blue -= .004;
+        green -= .004;
+    }
+    glutPostRedisplay();
+}
+void updateRight(int value) {
+    if (speed == 1) {
+        a = a + 18;
+        b = b - 18;
+        speed = 0;
+    }
+    a = a + 6;
+    b = b - 6;
+
+    /*making day to night*/
+    if (blue != 0 && green != 0) {
+        blue -= .004;
+        green -= .004;
+    }
+    glutPostRedisplay();
+}
+
+void display(void) {
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(red, green, blue, 0); /*back ground for sky*/
+    road();
+    car();
+    drawPerson();
+    glFlush();
+}
+
+void moveLeft(void) {
+    glutTimerFunc(50, update, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(red, green, blue, 0); /*back ground for sky*/
+    road();
+    car();
+    drawPerson();
+    glFlush();
+}
+
+void moveRight(void) {
+    glutTimerFunc(50, updateRight, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(red, green, blue, 0); /*back ground for sky*/
+    road();
+    car();
+    std::cout << red, green, blue ;
+    drawPerson();
+    glFlush();
+}
+
+void drawCircle(float cx, float cy, float radius, int num_segments) {
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i < num_segments; i++) {
+        float theta = 2.0f * 3.1415926f * float(i) / float(num_segments);
+        float x = radius * cosf(theta);
+        float y = radius * sinf(theta);
+        glVertex2f(x + cx, y + cy);
+    }
+    glEnd();
+}
+
+
+void drawPerson() {
+    glPushMatrix();
+    int perx = 720;
+    int pery = 200;
+    glTranslatef(perx, pery, 0.0);
+    glRotatef(0, 0.0, 0.0, 1.0);
+    glTranslatef(-perx, -pery, 0.0);
+    // Draw head
+    drawCircle(673.0, 356.0, 30.0, 20);
+
+    // Draw body
+    glBegin(GL_LINES);
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex2f(673.0, 326.0);
+    glVertex2f(673.0, 246.0);
+    glEnd();
+
+    // Draw arms
+    glBegin(GL_LINES);
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex2f(620.0, 300.0);
+    glVertex2f(720.0, 300.0);
+    glEnd();
+
+    // Draw legs
+    glBegin(GL_LINES);
+    glVertex2f(673.0, 246.0);
+    glVertex2f(620.0, 200.0);
+    glVertex2f(673.0, 246.0);
+    glVertex2f(720.0, 200.0);
+    glEnd();
+
+    glPopMatrix();
+
+    //zebra crossing
+    glBegin(GL_QUADS);
+        glColor3f(1.0, 1.0, 1.0);
+        glVertex2f(800, 193);
+        glVertex2f(900, 193);
+        glVertex2f(900, 200);
+        glVertex2f(800, 200);
+    glEnd();
+    glBegin(GL_QUADS);
+        glColor3f(0.0, 0.0, 0.0);
+        glVertex2f(800, 186);
+        glVertex2f(900, 186);
+        glVertex2f(900, 193);
+        glVertex2f(800, 193);
+    glEnd();
+    glBegin(GL_QUADS);
+        glColor3f(1.0, 1.0, 1.0);
+        glVertex2f(800, 179);
+        glVertex2f(900, 179);
+        glVertex2f(900, 186);
+        glVertex2f(800, 186);
+    glEnd();
+        glBegin(GL_QUADS);
+        glColor3f(0.0, 0.0, 0.0);
+        glVertex2f(800, 172);
+        glVertex2f(900, 172);
+        glVertex2f(900, 179);
+        glVertex2f(800, 179); 
+    glEnd();
+        glBegin(GL_QUADS);
+        glColor3f(1.0, 1.0, 1.0);
+        glVertex2f(800, 165);
+        glVertex2f(900, 165);
+        glVertex2f(900, 172);
+        glVertex2f(800, 172);
+    glEnd();
+}
+
+
+
+void road() {
+    glPushMatrix();
+    glScaled(40.0, 40.0, 0.0);
+    glColor3f(0.1, 0.2, 0.1);
+    glBegin(GL_POLYGON);
+
+    //straight road
+    glVertex2f(0, 5);
+    glVertex2f(40, 5);
+    glVertex2f(40, 10);
+    glVertex2f(0, 10);
+    glEnd();
+
+    //green edge
+    glBegin(GL_POLYGON);
+        glColor3f(0, 0, 0);
+        glVertex2f(0, 5);
+        glVertex2f(40, 5);
+        glVertex2f(40, 4);
+        glVertex2f(0, 4);
+    glEnd();
+
+    //cross road
+    glColor3f(0.1, 0.1, 0.1);
+    glBegin(GL_POLYGON);
+    glVertex2f(0, 10);
+    glVertex2f(15, 10);
+    glEnd();
+    glPopMatrix();
+}
+
+void car() {
+    //making color for outer line
+    glPushMatrix();
+    glTranslated(b, 178.0, 0.0);
+    glScaled(20.0, 20.0, 0.0);
+    glColor3f(1.0, 0.0, 0.0);
+    glBegin(GL_POLYGON);
+    glVertex2f(2.5, 2.5);
+    glVertex2f(3.0, 3.5);
+    glVertex2f(3.5, 3.75);
+    glVertex2f(4.0, 4.0);
+    glVertex2f(4.5, 4.0);
+    glVertex2f(5.0, 3.75);
+    glVertex2f(5.5, 3.5);
+    glVertex2f(5.75, 3.0);
+    glVertex2f(6.0, 2.5);
+    glVertex2f(16.5, 2.5);
+    glVertex2f(16.75, 3.0);
+    glVertex2f(17.0, 3.5);
+    glVertex2f(17.5, 3.75);
+    glVertex2f(18.0, 4.0);
+    glVertex2f(18.5, 4.0);
+    glVertex2f(19.0, 3.75);
+    glVertex2f(19.5, 3.5);
+    glVertex2f(19.75, 3.0);
+    glVertex2f(20.0, 2.5);
+    glVertex2f(21.0, 2.5);
+    glVertex2f(21.0, 4.0);
+    glVertex2f(21.5, 4.0);
+    glVertex2f(21.0, 4.5);
+    glVertex2f(20.0, 5.0);
+    glVertex2f(15.0, 5.0);
+    glVertex2f(14.0, 5.5);
+    glVertex2f(13.0, 6.0);
+    glVertex2f(12.0, 6.5);
+    glVertex2f(11.0, 7.0);
+    glVertex2f(6.0, 7.0);
+    glVertex2f(5.0, 6.5);
+    glVertex2f(4.5, 6.25);
+    glVertex2f(4.25, 6.0);
+    glVertex2f(4.0, 5.75);
+    glVertex2f(3.5, 5.5);
+    glVertex2f(3.0, 5.5);
+    glVertex2f(1.9, 5.45);
+    glVertex2f(1.8, 5.4);
+    glVertex2f(1.7, 5.35);
+    glVertex2f(1.6, 5.3);
+    glVertex2f(1.5, 5.25);
+    glVertex2f(1.4, 5.15);
+    glVertex2f(1.3, 5.0);
+    glVertex2f(1.2, 4.85);
+    glVertex2f(1.1, 4.7);
+    glVertex2f(1.0, 4.3);
+    glVertex2f(1.0, 3.2);
+    glVertex2f(1.1, 3.05);
+    glVertex2f(1.2, 2.9);
+    glVertex2f(1.3, 2.9);
+    glVertex2f(1.4, 2.75);
+    glVertex2f(1.5, 2.65);
+    glVertex2f(1.6, 2.6);
+    glVertex2f(1.7, 2.55);
+    glVertex2f(1.8, 2.5);
+    glVertex2f(1.9, 2.45);
+    glVertex2f(2.0, 2.5);
+    glEnd();
+
+    //color for outer window
+    glColor3f(1.0, 1.0, 1.0);
+    glBegin(GL_POLYGON);
+    glVertex2f(5.0, 5.0);
+    glVertex2f(14.0, 5.0);
+    glVertex2f(11.5, 6.5);
+    glVertex2f(10.5, 6.75);
+    glVertex2f(7.0, 6.75);
+    glEnd();
+
+    //making outer line for car
+    glColor3f(1.0, 1.0, 1.0);
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(2.5, 2.5);
+    glVertex2f(3.0, 3.5);
+    glVertex2f(3.5, 3.75);
+    glVertex2f(4.0, 4.0);
+    glVertex2f(4.5, 4.0);
+    glVertex2f(5.0, 3.75);
+    glVertex2f(5.5, 3.5);
+    glVertex2f(5.75, 3.0);
+    glVertex2f(6.0, 2.5);
+    glVertex2f(16.5, 2.5);
+    glVertex2f(16.75, 3.0);
+    glVertex2f(17.0, 3.5);
+    glVertex2f(17.5, 3.75);
+    glVertex2f(18.0, 4.0);
+    glVertex2f(18.5, 4.0);
+    glVertex2f(19.0, 3.75);
+    glVertex2f(19.5, 3.5);
+    glVertex2f(19.75, 3.0);
+    glVertex2f(20.0, 2.5);
+    glVertex2f(21.0, 2.5);
+    glVertex2f(21.0, 4.0);
+    glVertex2f(21.5, 4.0);
+    glVertex2f(21.0, 4.5);
+    glVertex2f(20.0, 5.0);
+    glVertex2f(15.0, 5.0);
+    glVertex2f(14.0, 5.5);
+    glVertex2f(13.0, 6.0);
+    glVertex2f(12.0, 6.5);
+    glVertex2f(11.0, 7.0);
+    glVertex2f(6.0, 7.0);
+    glVertex2f(5.0, 6.5);
+    glVertex2f(4.5, 6.25);
+    glVertex2f(4.25, 6.0);
+    glVertex2f(4.0, 5.75);
+    glVertex2f(3.5, 5.5);
+    glVertex2f(3.0, 5.5);
+    glVertex2f(1.9, 5.45);
+    glVertex2f(1.8, 5.4);
+    glVertex2f(1.7, 5.35);
+    glVertex2f(1.6, 5.3);
+    glVertex2f(1.5, 5.25);
+    glVertex2f(1.4, 5.15);
+    glVertex2f(1.3, 5.0);
+    glVertex2f(1.2, 4.85);
+    glVertex2f(1.1, 4.7);
+    glVertex2f(1.0, 4.3);
+    glVertex2f(1.0, 3.2);
+    glVertex2f(1.1, 3.05);
+    glVertex2f(1.2, 2.9);
+    glVertex2f(1.3, 2.9);
+    glVertex2f(1.4, 2.75);
+    glVertex2f(1.5, 2.65);
+    glVertex2f(1.6, 2.6);
+    glVertex2f(1.7, 2.55);
+    glVertex2f(1.8, 2.5);
+    glVertex2f(1.9, 2.45);
+    glVertex2f(2.0, 2.5);
+    glEnd();
+
+    //connecting outer line
+    glBegin(GL_LINES);
+    glVertex2d(7.0, 5.0);
+    glVertex2d(15.0, 5.0);
+    glEnd();
+
+    //connecting outer line
+    glColor3f(0.0, 0.0, 0.0);
+    glBegin(GL_LINES);
+    glVertex2d(15.0, 4.0);
+    glVertex2d(17.0, 4.0);
+    glEnd();
+
+    //connecting outer line
+    glColor3f(0.0, 0.0, 0.0);
+    glBegin(GL_LINES);
+    glVertex2d(15.0, 3.5);
+    glVertex2d(16.5, 3.5);
+    glEnd();
+
+    //connecting outer line
+    glColor3f(0.0, 0.0, 0.0);
+    glBegin(GL_LINES);
+    glVertex2d(15.0, 5.0);
+    glVertex2d(14.0, 3.0);
+    glEnd();
+
+    //connecting outer line
+    glColor3f(1.0, 1.0, 1.0);
+    glBegin(GL_LINES);
+    glVertex2d(12.0, 5.0);
+    glVertex2d(12.0, 6.2);
+    glEnd();
+
+    //connecting outer line
+    glColor3f(1.0, 1.0, 1.0);
+    glBegin(GL_LINES);
+    glVertex2d(7.0, 5.0);
+    glVertex2d(7.0, 6.7);
+    glEnd();
+
+    //drawing a back tyre
+    glBegin(GL_POLYGON);
+    glVertex2f(3.0, 2.5);
+    glVertex2f(3.0, 2.6);
+    glVertex2f(3.15, 3.1);
+    glVertex2f(3.2, 3.2);
+    glVertex2f(3.3, 3.35);
+    glVertex2f(3.4, 3.4);
+    glVertex2f(3.5, 3.45);
+    glVertex2f(3.6, 3.55);
+    glVertex2f(3.7, 3.6);
+    glVertex2f(3.8, 3.63);
+    glVertex2f(4.0, 3.65);
+    glVertex2f(4.2, 3.7);
+    glVertex2f(4.4, 3.7);
+    glVertex2f(4.6, 3.65);
+    glVertex2f(4.8, 3.55);
+    glVertex2f(5.0, 3.45);
+    glVertex2f(5.1, 3.4);
+    glVertex2f(5.2, 3.25);
+    glVertex2f(5.3, 3.2);
+    glVertex2f(5.4, 3.0);
+    glVertex2f(5.5, 2.5);
+
+    glVertex2f(5.45, 2.15);
+    glVertex2f(5.4, 1.9);
+    glVertex2f(5.35, 1.8);
+    glVertex2f(5.2, 1.6);
+    glVertex2f(5.0, 1.5);
+    glVertex2f(4.9, 1.4);
+    glVertex2f(4.7, 1.3);
+    glVertex2f(4.6, 1.27);
+    glVertex2f(4.4, 1.25);
+    glVertex2f(4.0, 1.25);
+    glVertex2f(3.9, 1.3);
+    glVertex2f(3.75, 1.35);
+    glVertex2f(3.6, 1.4);
+    glVertex2f(3.45, 1.55);
+    glVertex2f(3.3, 1.7);
+    glVertex2f(3.2, 1.8);
+    glVertex2f(3.1, 2.2);
+    glEnd();
+
+    //drawing front tyre
+    glBegin(GL_POLYGON);
+    glVertex2f(17.0, 2.5);
+    glVertex2f(17.0, 2.6);
+    glVertex2f(17.15, 3.1);
+    glVertex2f(17.2, 3.2);
+    glVertex2f(17.3, 3.35);
+    glVertex2f(17.4, 3.4);
+    glVertex2f(17.5, 3.45);
+    glVertex2f(17.6, 3.55);
+    glVertex2f(17.7, 3.6);
+    glVertex2f(17.8, 3.63);
+    glVertex2f(18.0, 3.65);
+    glVertex2f(18.2, 3.7);
+    glVertex2f(18.4, 3.7);
+    glVertex2f(18.6, 3.65);
+    glVertex2f(18.8, 3.55);
+    glVertex2f(19.0, 3.45);
+    glVertex2f(19.1, 3.4);
+    glVertex2f(19.2, 3.25);
+    glVertex2f(19.3, 3.2);
+    glVertex2f(19.4, 3.0);
+
+    glVertex2f(19.5, 2.5);
+    glVertex2f(19.45, 2.15);
+    glVertex2f(19.4, 1.9);
+    glVertex2f(19.35, 1.8);
+    glVertex2f(19.2, 1.6);
+    glVertex2f(19.0, 1.5);
+    glVertex2f(18.9, 1.4);
+    glVertex2f(18.7, 1.3);
+    glVertex2f(18.6, 1.27);
+    glVertex2f(18.4, 1.25);
+    glVertex2f(18.0, 1.25);
+    glVertex2f(17.9, 1.3);
+    glVertex2f(17.75, 1.35);
+    glVertex2f(17.6, 1.4);
+    glVertex2f(17.45, 1.55);
+    glVertex2f(17.3, 1.7);
+    glVertex2f(17.2, 1.8);
+    glVertex2f(17.1, 2.2);
+    glEnd();
+    glPopMatrix();
+}
+
+void myinit() {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0.0, 1346.0, 0.0, 728.0);
+}
+
+int main(int argc, char* argv[]) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(1346, 728);
+    glutInitWindowPosition(0, 0);
+    glutCreateWindow("Road Crossing Awareness");
+    glutDisplayFunc(mydisplay);
+    glutKeyboardFunc(myKeyboard);
+    glutSpecialFunc(spKey);
+    myinit();
+    glutMainLoop();
+    return 0;
+}
