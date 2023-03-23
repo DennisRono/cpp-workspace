@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<iostream>
 
 #include<GL/glut.h>
 #include<cmath>
@@ -9,7 +10,6 @@ void car();
 void drawPerson();
 void mydisplay();
 void display();
-// void update();
 void moveLeft();
 void moveRight();
 GLint a = 300, b = -300, flag = 0, speed = 0, d = 10;
@@ -18,104 +18,107 @@ GLfloat red = 0, blue = 1, green = .3;
 GLfloat p = 0, q = 0, r = 0;
 
 void myKeyboard(unsigned char key, int x, int y) {
-  switch (key) {
-  case 13:
-    if (flag == 1) {
-      mydisplay();
+    switch (key) {
+    case 13:
+        if (flag == 1) {
+            mydisplay();
+        }
+        if (flag == 0) {
+            flag = 1;
+            mydisplay();
+        }
+        break;
+    case 's':
+        if (flag == 1) {
+            speed = 1;
+        }
+        break;
+    default:
+        break;
     }
-    if (flag == 0) {
-      flag = 1;
-      mydisplay();
-    }
-    break;
-  case 's':
-    if (flag == 1) {
-      speed = 1;
-    }
-    break;
-  default:
-    break;
-  }
 }
 
 void spKey(int key, int x, int y) {
-  switch (key) {
-  case GLUT_KEY_RIGHT:
-    flag = 1;
-    moveLeft();
-    break;
-  case GLUT_KEY_LEFT:
-    flag = 1;
-    moveRight();
-    break;
-  default:
-    break;
-  }
+    switch (key) {
+    case GLUT_KEY_RIGHT:
+        flag = 1;
+        moveLeft();
+        break;
+    case GLUT_KEY_LEFT:
+        flag = 1;
+        moveRight();
+        break;
+    default:
+        break;
+    }
 }
 
 void mydisplay(void) {
-  glClear(GL_COLOR_BUFFER_BIT);
-  display();
-  glutSwapBuffers();
+    glClear(GL_COLOR_BUFFER_BIT);
+    display();
+    glutSwapBuffers();
 }
 
 void update(int value) {
-  if (speed == 1) {
-    a = a - 18;
-    b = b + 18;
-    speed = 0;
-  }
-  a = a - 6;
-  b = b + 6;
-  /*making day to night*/
-  if (blue != 0 && green != 0) {
-    blue -= .004;
-    green -= .004;
-  }
-  glutPostRedisplay();
+    if (speed == 1) {
+        a = a - 18;
+        b = b + 18;
+        speed = 0;
+    }
+    a = a - 6;
+    b = b + 6;
+    /*making day to night*/
+    if (blue != 0 && green != 0) {
+        blue -= .004;
+        green -= .004;
+    }
+    glutPostRedisplay();
 }
 void updateRight(int value) {
-  if (speed == 1) {
-    a = a + 18;
-    b = b - 18;
-    speed = 0;
-  }
+    if (speed == 1) {
+        a = a + 18;
+        b = b - 18;
+        speed = 0;
+    }
+    a = a + 6;
+    b = b - 6;
 
-  /*making day to night*/
-  if (blue != 0 && green != 0) {
-    blue -= .004;
-    green -= .004;
-  }
-  glutPostRedisplay();
+    /*making day to night*/
+    if (blue != 0 && green != 0) {
+        blue -= .004;
+        green -= .004;
+    }
+    glutPostRedisplay();
 }
 
 void display(void) {
-  glClear(GL_COLOR_BUFFER_BIT);
-  glClearColor(red, green, blue, 0); /*back ground for sky*/
-  road();
-  car();
-  drawPerson();
-  glFlush();
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(red, green, blue, 0); /*back ground for sky*/
+    road();
+    car();
+    drawPerson();
+    glFlush();
 }
 
 void moveLeft(void) {
-  glutTimerFunc(50, update, 0);
-  glClear(GL_COLOR_BUFFER_BIT);
-  glClearColor(red, green, blue, 0); /*back ground for sky*/
-  road();
-  car();
-  drawPerson();
-  glFlush();
+    glutTimerFunc(50, update, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(red, green, blue, 0); /*back ground for sky*/
+    road();
+    car();
+    drawPerson();
+    glFlush();
 }
 
 void moveRight(void) {
-  glutTimerFunc(50, updateRight, 0);
-  glClear(GL_COLOR_BUFFER_BIT);
-  glClearColor(red, green, blue, 0); /*back ground for sky*/
-  road();
-  car();
-  drawPerson();
-  glFlush();
+    glutTimerFunc(50, updateRight, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(red, green, blue, 0); /*back ground for sky*/
+    road();
+    car();
+    std::cout << red, green, blue ;
+    drawPerson();
+    glFlush();
 }
 
 void drawCircle(float cx, float cy, float radius, int num_segments) {
@@ -131,68 +134,113 @@ void drawCircle(float cx, float cy, float radius, int num_segments) {
 
 
 void drawPerson() {
+    glPushMatrix();
+    int perx = 720;
+    int pery = 200;
+    glTranslatef(perx, pery, 0.0);
+    glRotatef(0, 0.0, 0.0, 1.0);
+    glTranslatef(-perx, -pery, 0.0);
     // Draw head
     drawCircle(673.0, 356.0, 30.0, 20);
-    
+
     // Draw body
     glBegin(GL_LINES);
-        glColor3f(1.0, 0.0, 0.0);
-        glVertex2f(673.0, 326.0);
-        glVertex2f(673.0, 246.0);
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex2f(673.0, 326.0);
+    glVertex2f(673.0, 246.0);
     glEnd();
-    
+
     // Draw arms
     glBegin(GL_LINES);
-        glColor3f(1.0, 0.0, 0.0);
-        glVertex2f(620.0, 300.0);
-        glVertex2f(720.0, 300.0);
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex2f(620.0, 300.0);
+    glVertex2f(720.0, 300.0);
     glEnd();
-    
+
     // Draw legs
     glBegin(GL_LINES);
-        glVertex2f(673.0, 246.0);
-        glVertex2f(620.0, 200.0);
-        glVertex2f(673.0, 246.0);
-        glVertex2f(720.0, 200.0);
+    glVertex2f(673.0, 246.0);
+    glVertex2f(620.0, 200.0);
+    glVertex2f(673.0, 246.0);
+    glVertex2f(720.0, 200.0);
+    glEnd();
+
+    glPopMatrix();
+
+    //zebra crossing
+    glBegin(GL_QUADS);
+        glColor3f(1.0, 1.0, 1.0);
+        glVertex2f(800, 193);
+        glVertex2f(900, 193);
+        glVertex2f(900, 200);
+        glVertex2f(800, 200);
+    glEnd();
+    glBegin(GL_QUADS);
+        glColor3f(0.0, 0.0, 0.0);
+        glVertex2f(800, 186);
+        glVertex2f(900, 186);
+        glVertex2f(900, 193);
+        glVertex2f(800, 193);
+    glEnd();
+    glBegin(GL_QUADS);
+        glColor3f(1.0, 1.0, 1.0);
+        glVertex2f(800, 179);
+        glVertex2f(900, 179);
+        glVertex2f(900, 186);
+        glVertex2f(800, 186);
+    glEnd();
+        glBegin(GL_QUADS);
+        glColor3f(0.0, 0.0, 0.0);
+        glVertex2f(800, 172);
+        glVertex2f(900, 172);
+        glVertex2f(900, 179);
+        glVertex2f(800, 179); 
+    glEnd();
+        glBegin(GL_QUADS);
+        glColor3f(1.0, 1.0, 1.0);
+        glVertex2f(800, 165);
+        glVertex2f(900, 165);
+        glVertex2f(900, 172);
+        glVertex2f(800, 172);
     glEnd();
 }
 
 
 
 void road() {
-  glPushMatrix();
-  glScaled(40.0, 40.0, 0.0);
-  glColor3f(0.1, 0.1, 0.1);
-  glBegin(GL_POLYGON);
+    glPushMatrix();
+    glScaled(40.0, 40.0, 0.0);
+    glColor3f(0.1, 0.2, 0.1);
+    glBegin(GL_POLYGON);
 
-  //straight road
-  glVertex2f(0, 5);
-  glVertex2f(40, 5);
-  glVertex2f(40, 10);
-  glVertex2f(0, 10);
-  glEnd();
+    //straight road
+    glVertex2f(0, 5);
+    glVertex2f(40, 5);
+    glVertex2f(40, 10);
+    glVertex2f(0, 10);
+    glEnd();
 
-  //green edge
-  glBegin(GL_POLYGON);
-  glColor3f(0.1, 0.2, 0.1);
-  glVertex2f(0, 5);
-  glVertex2f(40, 5);
-  glVertex2f(40, 4);
-  glVertex2f(0, 4);
-  glEnd();
+    //green edge
+    glBegin(GL_POLYGON);
+        glColor3f(0, 0, 0);
+        glVertex2f(0, 5);
+        glVertex2f(40, 5);
+        glVertex2f(40, 4);
+        glVertex2f(0, 4);
+    glEnd();
 
-  //cross road
-  glColor3f(0.1, 0.1, 0.1);
-  glBegin(GL_POLYGON);
-  glVertex2f(0, 10);
-  glVertex2f(15, 10);
-  glEnd();
-  glPopMatrix();
+    //cross road
+    glColor3f(0.1, 0.1, 0.1);
+    glBegin(GL_POLYGON);
+    glVertex2f(0, 10);
+    glVertex2f(15, 10);
+    glEnd();
+    glPopMatrix();
 }
 
 void car() {
     //making color for outer line
-    glPushMatrix(); 
+    glPushMatrix();
     glTranslated(b, 178.0, 0.0);
     glScaled(20.0, 20.0, 0.0);
     glColor3f(1.0, 0.0, 0.0);
@@ -257,7 +305,7 @@ void car() {
     glEnd();
 
     //color for outer window
-    glColor3f(1.0, 1.0, 1.0); 
+    glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
     glVertex2f(5.0, 5.0);
     glVertex2f(14.0, 5.0);
@@ -267,7 +315,7 @@ void car() {
     glEnd();
 
     //making outer line for car
-    glColor3f(1.0, 1.0, 1.0); 
+    glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_LINE_LOOP);
     glVertex2f(2.5, 2.5);
     glVertex2f(3.0, 3.5);
@@ -356,7 +404,7 @@ void car() {
     glEnd();
 
     //connecting outer line
-    glColor3f(1.0, 1.0, 1.0); 
+    glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_LINES);
     glVertex2d(12.0, 5.0);
     glVertex2d(12.0, 6.2);
@@ -458,21 +506,21 @@ void car() {
 }
 
 void myinit() {
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  gluOrtho2D(0.0, 1346.0, 0.0, 728.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0.0, 1346.0, 0.0, 728.0);
 }
 
-int main(int argc, char * argv[]) {
-  glutInit( & argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-  glutInitWindowSize(1346, 728);
-  glutInitWindowPosition(0, 0);
-  glutCreateWindow("Road Crossing Awareness");
-  glutDisplayFunc(mydisplay);
-  glutKeyboardFunc(myKeyboard);
-  glutSpecialFunc(spKey);
-  myinit();
-  glutMainLoop();
-  return 0;
+int main(int argc, char* argv[]) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(1346, 728);
+    glutInitWindowPosition(0, 0);
+    glutCreateWindow("Road Crossing Awareness");
+    glutDisplayFunc(mydisplay);
+    glutKeyboardFunc(myKeyboard);
+    glutSpecialFunc(spKey);
+    myinit();
+    glutMainLoop();
+    return 0;
 }
